@@ -117,11 +117,15 @@ Before running this application, make sure you have:
 
 ## 🔧 Installation & Setup
 
+⚠️ **IMPORTANT**: The repository has been converted to a monorepo structure. All files are now included in a single clone operation.
+
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd maternalHealthsytem-
+git clone https://github.com/TechGriffo254/maternalHealthsytem.git
+cd maternalHealthsytem
 ```
+
+**✅ You will now get ALL files including the complete backend and frontend code!**
 
 ### 2. Backend Setup
 ```bash
