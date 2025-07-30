@@ -2,6 +2,7 @@ const HealthTip = require('../models/HealthTip');
 const ErrorResponse = require('../utils/errorResponse');
 const { USER_ROLES } = require('../utils/constants');
 const logService = require('../services/log.service');
+const aiService = require('../services/ai.service');
 
 // Utility: check if user has required role
 const hasRole = (user, roles) => roles.includes(user.role);
@@ -102,6 +103,75 @@ exports.deleteHealthTip = async (req, res, next) => {
     await logService.logActivity(req.user._id, req.user.role, `Deleted health tip: "${tip.title}"`, 'HealthTip', req.params.id);
 
     res.status(200).json({ success: true, data: {} });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Generate AI health tips
+// @route   POST /api/v1/healthtips/generate-ai
+// @access  Private (Super Admin, Hospital Admin, Staff)
+exports.generateAIHealthTips = async (req, res, next) => {
+  try {
+    if (!hasRole(req.user, [USER_ROLES.SUPER_ADMIN, USER_ROLES.HOSPITAL_ADMIN, USER_ROLES.STAFF])) {
+      return next(new ErrorResponse('Not authorized to generate AI health tips', 403));
+    }
+
+    const tipsGenerated = await aiService.generatePersonalizedTips();
+
+    await logService.logActivity(
+      req.user._id, 
+      req.user.role, 
+      `Generated ${tipsGenerated} AI health tips`, 
+      'HealthTip'
+    );
+
+    res.status(200).json({ 
+      success: true, 
+      message: `Generated ${tipsGenerated} AI health tips`,
+      count: tipsGenerated 
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get personalized health tips for user
+// @route   GET /api/v1/healthtips/personalized
+// @access  Private (All authenticated users)
+exports.getPersonalizedHealthTips = async (req, res, next) => {
+  try {
+    const tips = await aiService.getPersonalizedTips(req.user._id);
+    
+    res.status(200).json({ 
+      success: true, 
+      count: tips.length, 
+      data: tips 
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get health tips by pregnancy week
+// @route   GET /api/v1/healthtips/week/:week
+// @access  Private (All authenticated users)
+exports.getHealthTipsByWeek = async (req, res, next) => {
+  try {
+    const week = parseInt(req.params.week);
+    
+    if (week < 1 || week > 42) {
+      return next(new ErrorResponse('Week must be between 1 and 42', 400));
+    }
+
+    const tips = await aiService.getTipsByWeek(week);
+    
+    res.status(200).json({ 
+      success: true, 
+      week: week,
+      count: tips.length, 
+      data: tips 
+    });
   } catch (error) {
     next(error);
   }

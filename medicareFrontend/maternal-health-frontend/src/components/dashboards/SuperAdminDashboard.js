@@ -44,6 +44,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import dashboardService from '../../services/dashboardService';
 
 const SuperAdminDashboard = () => {
   const navigate = useNavigate();
@@ -74,36 +75,8 @@ const SuperAdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Fetch all dashboard data
-      // This would call various API endpoints
-      
-      // Mock data for now
-      setDashboardData({
-        stats: {
-          totalHospitals: 25,
-          totalUsers: 1250,
-          totalPatients: 980,
-          totalStaff: 245,
-          hospitalAdmins: 25,
-          activeHospitals: 23
-        },
-        recentHospitals: [
-          { _id: '1', name: 'Kenyatta National Hospital', location: 'Nairobi', createdAt: new Date(), status: 'active' },
-          { _id: '2', name: 'Moi Teaching Hospital', location: 'Eldoret', createdAt: new Date(), status: 'active' },
-        ],
-        recentUsers: [
-          { _id: '1', name: 'Dr. John Doe', role: 'hospitaladmin', hospital: 'Kenyatta National Hospital', createdAt: new Date() },
-          { _id: '2', name: 'Nurse Jane Smith', role: 'staff', hospital: 'Moi Teaching Hospital', createdAt: new Date() },
-        ],
-        systemLogs: [
-          { _id: '1', action: 'Hospital Added', user: 'Super Admin', timestamp: new Date(), details: 'Added Kenyatta National Hospital' },
-          { _id: '2', action: 'User Created', user: 'Dr. John Doe', timestamp: new Date(), details: 'Created hospital admin account' },
-        ],
-        hospitalPerformance: [
-          { hospital: 'Kenyatta National Hospital', patients: 120, appointments: 89, staff: 15, performance: 92 },
-          { hospital: 'Moi Teaching Hospital', patients: 98, appointments: 76, staff: 12, performance: 87 },
-        ]
-      });
+      const data = await dashboardService.getSuperAdminDashboard();
+      setDashboardData(data);
     } catch (error) {
       toast.error('Failed to fetch dashboard data');
       console.error(error);

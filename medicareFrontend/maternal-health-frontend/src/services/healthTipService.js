@@ -52,5 +52,35 @@ export const healthTipService = {
     } catch (error) {
       throw error.response?.data || { message: 'Failed to delete health tip' };
     }
+  },
+
+  // Get personalized health tips
+  getPersonalizedHealthTips: async () => {
+    try {
+      const response = await api.get('/healthtips/personalized');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: 'Failed to fetch personalized health tips' };
+    }
+  },
+
+  // Get health tips by pregnancy week
+  getHealthTipsByWeek: async (week) => {
+    try {
+      const response = await api.get(`/healthtips/week/${week}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: `Failed to fetch health tips for week ${week}` };
+    }
+  },
+
+  // Generate AI health tips (admin/staff only)
+  generateAIHealthTips: async () => {
+    try {
+      const response = await api.post('/healthtips/generate-ai');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: 'Failed to generate AI health tips' };
+    }
   }
 };

@@ -21,6 +21,7 @@ const visits = require("./routes/visit.routes");
 const healthTips = require("./routes/healthTip.routes");
 const submissions = require("./routes/submission.routes");
 const logs = require("./routes/logs.routes");
+const dashboard = require("./routes/dashboard.routes");
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.use("/api/v1/visits", visits);
 app.use("/api/v1/healthtips", healthTips);
 app.use("/api/v1/submissions", submissions);
 app.use("/api/v1/logs", logs);
+app.use("/api/v1/dashboard", dashboard);
 
 // Error Handler
 app.use(errorHandler);

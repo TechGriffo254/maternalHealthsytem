@@ -50,6 +50,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { dashboardService } from '../../services/dashboardService';
 
 const PatientDashboard = () => {
   const { user } = useAuth();
@@ -83,46 +84,8 @@ const PatientDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Fetch patient-specific dashboard data
-      
-      // Mock data for now
-      setDashboardData({
-        stats: {
-          totalAppointments: 12,
-          upcomingAppointments: 3,
-          completedAppointments: 9,
-          currentWeek: 24,
-          daysUntilDue: 112,
-          unreadReminders: 2
-        },
-        upcomingAppointments: [
-          { _id: '1', date: new Date(Date.now() + 86400000), time: '10:00 AM', type: 'Antenatal Checkup', doctor: 'Dr. Sarah Johnson', status: 'Scheduled' },
-          { _id: '2', date: new Date(Date.now() + 604800000), time: '02:00 PM', type: 'Vaccination', doctor: 'Nurse Mary Wanjiku', status: 'Scheduled' },
-        ],
-        recentAppointments: [
-          { _id: '1', date: new Date(Date.now() - 604800000), type: 'Antenatal Checkup', doctor: 'Dr. Sarah Johnson', status: 'Completed', notes: 'Everything looks good. Baby is developing well.' },
-          { _id: '2', date: new Date(Date.now() - 1209600000), type: 'Follow-up', doctor: 'Nurse Mary Wanjiku', status: 'Completed', notes: 'Blood pressure normal. Continue with current medication.' },
-        ],
-        healthTips: [
-          { _id: '1', title: 'Second Trimester Nutrition', content: 'Focus on calcium-rich foods like dairy products, leafy greens, and fortified foods for your baby\'s bone development.', category: 'Nutrition', isRead: false },
-          { _id: '2', title: 'Exercise During Pregnancy', content: 'Light exercises like walking and prenatal yoga can help with circulation and prepare your body for delivery.', category: 'Exercise', isRead: true },
-          { _id: '3', title: 'Managing Pregnancy Symptoms', content: 'If you experience morning sickness, try eating small, frequent meals and staying hydrated.', category: 'Health', isRead: false },
-        ],
-        reminders: [
-          { _id: '1', type: 'Appointment', message: 'Antenatal checkup tomorrow at 10:00 AM', date: new Date(Date.now() + 86400000), isRead: false },
-          { _id: '2', type: 'Medication', message: 'Don\'t forget to take your prenatal vitamins', date: new Date(), isRead: false },
-          { _id: '3', type: 'Health Tip', message: 'New nutrition tips available for week 24', date: new Date(), isRead: true },
-        ],
-        visitHistory: [
-          { _id: '1', date: new Date(Date.now() - 604800000), type: 'Antenatal', week: 23, weight: '65kg', bloodPressure: '120/80', notes: 'Normal development' },
-          { _id: '2', date: new Date(Date.now() - 1209600000), type: 'Antenatal', week: 21, weight: '63kg', bloodPressure: '118/78', notes: 'All vitals normal' },
-        ],
-        pregnancyMilestones: [
-          { week: 20, title: 'Halfway Point!', description: 'You\'re halfway through your pregnancy journey!', completed: true },
-          { week: 24, title: 'Viability Milestone', description: 'Your baby has reached an important developmental milestone.', completed: true },
-          { week: 28, title: 'Third Trimester', description: 'Welcome to the final stretch of your pregnancy!', completed: false },
-        ]
-      });
+      const data = await dashboardService.getPatientDashboard();
+      setDashboardData(data);
     } catch (error) {
       toast.error('Failed to fetch dashboard data');
       console.error(error);

@@ -49,6 +49,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import dashboardService from '../../services/dashboardService';
 
 const HospitalAdminDashboard = () => {
   const { user } = useAuth();
@@ -81,40 +82,8 @@ const HospitalAdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Fetch hospital-specific dashboard data
-      
-      // Mock data for now
-      setDashboardData({
-        stats: {
-          totalStaff: 25,
-          totalPatients: 450,
-          totalAppointments: 1200,
-          upcomingAppointments: 45,
-          todayAppointments: 12,
-          activeStaff: 23
-        },
-        recentStaff: [
-          { _id: '1', name: 'Dr. Sarah Johnson', specialty: 'Obstetrician', email: 'sarah@hospital.com', createdAt: new Date(), status: 'active' },
-          { _id: '2', name: 'Nurse Mary Wanjiku', specialty: 'Midwife', email: 'mary@hospital.com', createdAt: new Date(), status: 'active' },
-        ],
-        recentPatients: [
-          { _id: '1', name: 'Grace Muthoni', age: 28, lastVisit: new Date(), nextAppointment: new Date(), pregnancyWeek: 24 },
-          { _id: '2', name: 'Faith Wanjiru', age: 25, lastVisit: new Date(), nextAppointment: new Date(), pregnancyWeek: 16 },
-        ],
-        upcomingAppointments: [
-          { _id: '1', patient: 'Grace Muthoni', staff: 'Dr. Sarah Johnson', date: new Date(), type: 'Antenatal Checkup', status: 'Scheduled' },
-          { _id: '2', patient: 'Faith Wanjiru', staff: 'Nurse Mary Wanjiku', date: new Date(), type: 'Vaccination', status: 'Scheduled' },
-        ],
-        staffPerformance: [
-          { name: 'Dr. Sarah Johnson', patients: 45, appointments: 89, satisfaction: 96 },
-          { name: 'Nurse Mary Wanjiku', patients: 38, appointments: 76, satisfaction: 94 },
-        ],
-        departmentStats: [
-          { department: 'Antenatal Care', patients: 180, appointments: 420, staff: 8 },
-          { department: 'Postnatal Care', patients: 120, appointments: 280, staff: 6 },
-          { department: 'General Consultation', patients: 150, appointments: 500, staff: 11 },
-        ]
-      });
+      const data = await dashboardService.getHospitalAdminDashboard();
+      setDashboardData(data);
     } catch (error) {
       toast.error('Failed to fetch dashboard data');
       console.error(error);

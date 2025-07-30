@@ -50,6 +50,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { dashboardService } from '../../services/dashboardService';
 
 const StaffDashboard = () => {
   const { user } = useAuth();
@@ -83,41 +84,8 @@ const StaffDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Fetch staff-specific dashboard data
-      
-      // Mock data for now
-      setDashboardData({
-        stats: {
-          totalPatients: 45,
-          totalAppointments: 180,
-          todayAppointments: 8,
-          upcomingAppointments: 15,
-          completedAppointments: 165,
-          pendingReminders: 12
-        },
-        myPatients: [
-          { _id: '1', name: 'Grace Muthoni', age: 28, pregnancyWeek: 24, lastVisit: new Date(), nextAppointment: new Date(), status: 'Active' },
-          { _id: '2', name: 'Faith Wanjiru', age: 25, pregnancyWeek: 16, lastVisit: new Date(), nextAppointment: new Date(), status: 'Active' },
-          { _id: '3', name: 'Mary Nyawira', age: 30, pregnancyWeek: 32, lastVisit: new Date(), nextAppointment: new Date(), status: 'Active' },
-        ],
-        todayAppointments: [
-          { _id: '1', patient: 'Grace Muthoni', time: '09:00 AM', type: 'Antenatal Checkup', status: 'Scheduled' },
-          { _id: '2', patient: 'Faith Wanjiru', time: '10:30 AM', type: 'Vaccination', status: 'Scheduled' },
-          { _id: '3', patient: 'Mary Nyawira', time: '02:00 PM', type: 'Follow-up', status: 'Completed' },
-        ],
-        upcomingAppointments: [
-          { _id: '1', patient: 'Grace Muthoni', date: new Date(Date.now() + 86400000), type: 'Antenatal Checkup', status: 'Scheduled' },
-          { _id: '2', patient: 'Faith Wanjiru', date: new Date(Date.now() + 172800000), type: 'Consultation', status: 'Scheduled' },
-        ],
-        recentVisits: [
-          { _id: '1', patient: 'Mary Nyawira', date: new Date(), type: 'Antenatal', notes: 'Normal checkup, vitals good' },
-          { _id: '2', patient: 'Grace Muthoni', date: new Date(), type: 'Follow-up', notes: 'Blood pressure slightly elevated' },
-        ],
-        reminders: [
-          { _id: '1', patient: 'Grace Muthoni', type: 'Appointment', message: 'Antenatal checkup tomorrow', status: 'Pending' },
-          { _id: '2', patient: 'Faith Wanjiru', type: 'Health Tip', message: 'Nutrition guidelines for second trimester', status: 'Sent' },
-        ]
-      });
+      const data = await dashboardService.getStaffDashboard();
+      setDashboardData(data);
     } catch (error) {
       toast.error('Failed to fetch dashboard data');
       console.error(error);
