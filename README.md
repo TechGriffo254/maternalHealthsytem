@@ -1,17 +1,51 @@
 # Maternal Health Appointment and Alert System (MHAAS)
 
-A comprehensive digital health solution designed for rural clinics to manage maternal health appointments, patient records, and automated alert systems for expectant mothers.
+A comprehensive web-based application designed to support rural clinics in Kenya by improving the management of maternal health appointments, sending automated reminders, and providing essential health tips to expectant mothers. This system aims to address challenges such as missed antenatal visits, late deliveries, and reliance on outdated paper records.
 
-## 🏥 Overview
+## 🏥 Project Overview
 
 The Maternal Health Appointment and Alert System (MHAAS) is a full-stack web application that helps healthcare providers in rural areas manage:
 - Patient registration and profile management
 - Hospital and staff management
-- Appointment scheduling and tracking
-- Automated reminders via SMS/Email
-- Health tips and educational content
+- Appointment scheduling and tracking with automated reminders
+- Health tips and educational content delivery
 - Visit records and medical history
 - Real-time dashboard analytics
+- Audio and text health record submissions from patients
+
+## 👥 User Roles & Features
+
+The system supports multiple user roles, each with specific responsibilities:
+
+### 🛡️ Super Admin
+- **Hospital Onboarding**: Add new hospitals into the system with full details
+- **Admin Management**: Add dedicated Hospital Admins for each onboarded hospital  
+- **System Oversight**: View activity logs across the entire system
+- **User Management**: View and manage all users registered in the system (Super Admins, Hospital Admins, Staff, Patients)
+- **System Analytics**: Access comprehensive system-wide reports and statistics
+
+### 🏥 Hospital Admin
+- **Staff Management**: Onboard and manage staff members (doctors, nurses) for their specific hospital
+- **Patient Oversight**: View and manage all patient records associated with their hospital
+- **Appointment Management**: Oversee and manage all appointments and reminders within their hospital
+- **Hospital Operations**: Monitor hospital-specific activities and generate reports
+- **Resource Management**: Manage hospital resources and staff assignments
+
+### 👨‍⚕️ Staff (Doctors/Nurses)
+- **Patient Registration**: Register new patients into the system with comprehensive medical profiles
+- **Visit Management**: Create and manage visits for individual patients with detailed medical records
+- **Appointment Scheduling**: Set and update appointment schedules for patients
+- **Communication**: Send timely reminders to patients regarding appointments and health tips
+- **Medical Records**: Access and update patient medical histories and treatment plans
+- **Health Monitoring**: Review patient submissions and provide medical guidance
+
+### 🤰 Patient
+- **Appointment Access**: View personal appointment schedules and visit history
+- **Health Submissions**: Submit health records including audio notes and text updates to assigned staff
+- **Automated Reminders**: Receive timely reminders for appointments and health-related alerts
+- **Educational Content**: Access and read maternal health tips relevant to pregnancy stage
+- **Profile Management**: Update personal information and emergency contacts
+- **Communication**: Communicate with healthcare providers through the system
 
 ## 🏗️ Architecture
 
@@ -181,36 +215,47 @@ maternalHealthsytem-/
 └── README.md              # This file
 ```
 
-## 🔐 API Endpoints
+## 🔐 API Endpoints by Role
 
-### Authentication
+### Super Admin Endpoints
+- `POST /api/hospitals` - Onboard new hospitals
+- `POST /api/hospitals/:hospitalId/admin` - Add hospital administrators
+- `GET /api/logs` - View system-wide activity logs
+- `GET /api/users` - View all users in the system
+- `GET /api/users/:id` - View any user details
+- `PUT /api/users/:id` - Update any user
+- `DELETE /api/users/:id` - Delete any user
+
+### Hospital Admin Endpoints
+- `GET /api/hospitals/:hospitalId/staff` - View hospital staff
+- `POST /api/staff` - Add new staff members (doctors, nurses)
+- `GET /api/hospitals/:hospitalId/patients` - View hospital patients
+- `GET /api/hospitals/:hospitalId/appointments` - Manage hospital appointments
+- `GET /api/hospitals/:hospitalId/submissions` - View patient submissions
+- `GET /api/users/:userId/logs` - View logs for hospital users
+
+### Staff (Doctors/Nurses) Endpoints
+- `POST /api/patients` - Register new patients
+- `GET /api/patients` - View patients in their hospital
+- `POST /api/visits` - Create patient visits
+- `PUT /api/visits/:id` - Update visit records
+- `POST /api/appointments` - Schedule appointments
+- `PUT /api/appointments/:id` - Update appointments
+- `POST /api/reminders` - Send reminders to patients
+- `GET /api/hospitals/:hospitalId/submissions` - View patient submissions
+
+### Patient Endpoints
+- `GET /api/appointments/my` - View personal appointments
+- `GET /api/visits/my` - View visit history
+- `POST /api/me/submit` - Submit health records (audio/text)
+- `GET /api/me/submissions` - View own submissions
+- `GET /api/health-tips` - Access health tips
+- `PUT /api/auth/update-profile` - Update personal profile
+
+### Common Authentication Endpoints
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - User login
 - `POST /api/auth/change-password` - Change password
-- `PUT /api/auth/update-profile` - Update user profile
-
-### Patients
-- `GET /api/patients` - Get all patients
-- `POST /api/patients` - Register new patient
-- `GET /api/patients/:id` - Get patient by ID
-- `PUT /api/patients/:id` - Update patient
-- `DELETE /api/patients/:id` - Delete patient
-
-### Appointments
-- `GET /api/appointments` - Get appointments
-- `POST /api/appointments` - Create appointment
-- `PUT /api/appointments/:id` - Update appointment
-- `DELETE /api/appointments/:id` - Cancel appointment
-
-### Hospitals
-- `GET /api/hospitals` - Get all hospitals
-- `POST /api/hospitals` - Create hospital
-- `PUT /api/hospitals/:id` - Update hospital
-
-### Staff Management
-- `GET /api/staff` - Get staff members
-- `POST /api/staff` - Add staff member
-- `PUT /api/staff/:id` - Update staff member
 
 ## 👥 User Roles
 
@@ -221,18 +266,27 @@ maternalHealthsytem-/
 5. **Receptionist**: Appointment scheduling, patient check-in
 6. **Patient**: View appointments, receive notifications
 
-## 🔔 Notification System
+## 🔔 Notification & Alert System
 
 The system supports automated notifications via:
 - **SMS**: Using Africa's Talking API
 - **Email**: Using Nodemailer with Gmail SMTP
 - **In-App**: Real-time dashboard notifications
 
-### Notification Types:
+### Notification Types
 - Appointment reminders (24 hours before)
-- Health tips and educational content
-- Emergency alerts
-- Follow-up reminders
+- Health tips and educational content relevant to pregnancy stage
+- Emergency alerts for high-risk pregnancies
+- Follow-up reminders for missed appointments
+- Medication reminders
+- Antenatal care schedule notifications
+
+### Alert Features
+- Automated reminder system for expectant mothers
+- Missed appointment follow-up alerts
+- Health tips delivery based on pregnancy stage
+- Emergency contact notifications
+- Staff notifications for urgent patient needs
 
 ## 🚀 Deployment
 
